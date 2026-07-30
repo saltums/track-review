@@ -9,14 +9,14 @@ export default function AudioPlayer({ fileUrl, onTimeUpdate, seekRequest }) {
   const [duration, setDuration] = useState(0)
   const [volume, setVolume] = useState(1)
 
-  // ãã¡ã¤ã«ãå¤ãã£ãããªã»ãã
+  // ファイルが変わったらリセット
   useEffect(() => {
     setIsPlaying(false)
     setCurrentTime(0)
     setDuration(0)
   }, [fileUrl])
 
-  // ã³ã¡ã³ãã¯ãªãã¯ã«ããå¤é¨ã·ã¼ã¯ï¼{ time, id } å½¢å¼ã§æ¯åæ°ãªãã¸ã§ã¯ãï¼
+  // コメントクリックによる外部シーク（{ time, id } 形式で毎回新オブジェクト）
   useEffect(() => {
     if (!seekRequest || !audioRef.current) return
     audioRef.current.currentTime = seekRequest.time
@@ -77,7 +77,7 @@ export default function AudioPlayer({ fileUrl, onTimeUpdate, seekRequest }) {
         />
       )}
 
-      {/* ã·ã¼ã¯ãã¼ */}
+      {/* シークバー */}
       <div className="flex items-center gap-2 mb-3">
         <span className="text-xs text-slate-400 w-10 text-right tabular-nums">
           {formatTime(currentTime)}
@@ -102,9 +102,9 @@ export default function AudioPlayer({ fileUrl, onTimeUpdate, seekRequest }) {
         </span>
       </div>
 
-      {/* ã³ã³ãã­ã¼ã« */}
+      {/* コントロール */}
       <div className="flex items-center justify-between">
-        {/* ããªã¥ã¼ã  */}
+        {/* ボリューム */}
         <div className="flex items-center gap-1">
           <Volume2 size={14} className="text-slate-500" />
           <input
@@ -125,7 +125,7 @@ export default function AudioPlayer({ fileUrl, onTimeUpdate, seekRequest }) {
           />
         </div>
 
-        {/* åçã³ã³ãã­ã¼ã« */}
+        {/* 再生コントロール */}
         <div className="flex items-center gap-3">
           <button
             onClick={() => skip(-10)}
@@ -160,7 +160,7 @@ export default function AudioPlayer({ fileUrl, onTimeUpdate, seekRequest }) {
 
       {!fileUrl && (
         <p className="text-center text-xs text-slate-500 mt-2">
-          ãã¼ã¸ã§ã³ãé¸æãããé³æºãã¢ããã­ã¼ããã¦ãã ãã
+          バージョンを選択するか音源をアップロードしてください
         </p>
       )}
     </div>
