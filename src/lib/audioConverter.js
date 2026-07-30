@@ -1,6 +1,6 @@
 /**
- * WAVãã¡ã¤ã«ãMP3ã«å¤æãã
- * lamejsãä½¿ç¨ãã¦ãã©ã¦ã¶ä¸ã§ã¨ã³ã³ã¼ã
+ * WAVファイルをMP3に変換する
+ * lamejsを使用してブラウザ上でエンコード
  */
 export async function convertWavToMp3(wavFile) {
   const lamejs = (await import('lamejs')).default
