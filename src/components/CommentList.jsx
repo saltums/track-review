@@ -4,7 +4,7 @@ import { formatTime } from '../lib/audioConverter'
 
 function formatTimestamp(start, end) {
   if (start === null || start === undefined) return ''
-  if (end !== null && end !== undefined) return `${formatTime(start)} ã ${formatTime(end)}`
+  if (end !== null && end !== undefined) return `${formatTime(start)} 〜 ${formatTime(end)}`
   return formatTime(start)
 }
 
@@ -17,7 +17,7 @@ function formatDate(iso) {
 
 export default function CommentList({ comments, onDelete, onSeek }) {
   const handleDelete = async (id) => {
-    if (!confirm('ãã®ã³ã¡ã³ããåé¤ãã¾ããï¼')) return
+    if (!confirm('このコメントを削除しますか?')) return
     const { error } = await supabase.from('comments').delete().eq('id', id)
     if (!error) onDelete?.(id)
   }
@@ -28,14 +28,14 @@ export default function CommentList({ comments, onDelete, onSeek }) {
     if (navigator.share) {
       navigator.share({ text }).catch(() => {})
     } else {
-      navigator.clipboard.writeText(text).then(() => alert('ã³ãã¼ãã¾ãã'))
+      navigator.clipboard.writeText(text).then(() => alert('コピーしました'))
     }
   }
 
   if (comments.length === 0) {
     return (
       <div className="flex-1 flex items-center justify-center py-16">
-        <p className="text-slate-500 text-sm">ã¾ã ã³ã¡ã³ãã¯ããã¾ãã</p>
+        <p className="text-slate-500 text-sm">まだコメントはありません</p>
       </div>
     )
   }
@@ -55,7 +55,7 @@ export default function CommentList({ comments, onDelete, onSeek }) {
         >
           <div className="flex items-start justify-between gap-2 mb-1">
             <div className="flex items-center gap-2 min-w-0">
-              {/* ã¿ã¤ã ã¹ã¿ã³ãï¼ã¯ãªãã¯ã§ã·ã¼ã¯ï¼ */}
+              {/* タイムスタンプ（ク㢏ックでシーク） */}
               {(c.timestamp_start !== null && c.timestamp_start !== undefined) && (
                 <button
                   onClick={() => onSeek?.(c.timestamp_start)}
@@ -72,14 +72,14 @@ export default function CommentList({ comments, onDelete, onSeek }) {
               <button
                 onClick={() => shareComment(c)}
                 className="text-slate-500 hover:text-slate-300 p-1 transition-colors"
-                title="å±æ"
+                title="共有"
               >
                 <Share2 size={13} />
               </button>
               <button
                 onClick={() => handleDelete(c.id)}
                 className="text-slate-500 hover:text-red-400 p-1 transition-colors"
-                title="åé¤"
+                title="削除"
               >
                 <Trash2 size={13} />
               </button>
