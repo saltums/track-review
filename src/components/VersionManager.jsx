@@ -14,20 +14,20 @@ export default function VersionManager({ trackId, versions, selectedVersion, onV
   const handleFileUpload = async (e) => {
     const file = e.target.files?.[0]
     if (!file || !versionLabel.trim()) return
-    if (!trackId) { setError('åã«ãã©ãã¯ãé¸æãã¦ãã ãã'); return }
+    if (!trackId) { setError('先にトラックを選択してください'); return }
 
     const isWav = /\.wav$/i.test(file.name) || file.type === 'audio/wav' || file.type === 'audio/x-wav' || file.type === 'audio/wave'
     const isMp3 = /\.mp3$/i.test(file.name) || file.type === 'audio/mpeg' || file.type === 'audio/mp3'
 
     if (!isWav && !isMp3) {
-      setError('MP3ã¾ãã¯WAVãã¡ã¤ã«ãé¸æãã¦ãã ãã')
+      setError('MP3またはWAVファイルを選択してください')
       fileInputRef.current.value = ''
       return
     }
 
-    // WAVã®å ´åãå¤§å®¹éãã¡ã¤ã«ã¯å¤æãéããªãããè­¦å
+    // WAVの場合、大容量ファイルは変換が重くなるため警告
     if (isWav && file.size > 50 * 1024 * 1024) {
-      setError(`ãã¡ã¤ã«ãå¤§ãããã¾ãï¼${(file.size / 1024 / 1024).toFixed(0)}MBï¼ãã¹ããã§ã¯50MBä»¥ä¸ãæ¨å¥¨ãã¾ãã`)
+      setError(`ファイルが大きすぎます（${(file.size / 1024 / 1024).toFixed(0)}MB）。スマホでは50MB以下を推奨します。`)
       fileInputRef.current.value = ''
       return
     }
@@ -39,11 +39,11 @@ export default function VersionManager({ trackId, versions, selectedVersion, onV
       let uploadFile = file
 
       if (isWav) {
-        setUploadProgress('WAV â MP3 å¤æä¸­... (ãã°ãããå¾ã¡ãã ãã)')
+        setUploadProgress('WAV → MP3 変換中... (しばらくお待ちください)')
         uploadFile = await convertWavToMp3(file)
       }
 
-      setUploadProgress('ã¢ããã­ã¼ãä¸­...')
+      setUploadProgress('アップロード中...')
       const ext = uploadFile.name.split('.').pop()
       const path = `${trackId}/${Date.now()}_${versionLabel.replace(/\s/g, '_')}.${ext}`
 
@@ -75,7 +75,7 @@ export default function VersionManager({ trackId, versions, selectedVersion, onV
       setShowUploadForm(false)
       fileInputRef.current.value = ''
     } catch (err) {
-      setError(err.message || 'ã¢ããã­ã¼ãã«å¤±æãã¾ãã')
+      setError(err.message || 'アップロードに失敗しました')
     } finally {
       setUploading(false)
       setUploadProgress('')
@@ -85,18 +85,18 @@ export default function VersionManager({ trackId, versions, selectedVersion, onV
   return (
     <div className="bg-slate-800 border-b border-slate-700 px-4 py-3">
       <div className="flex items-center justify-between mb-2">
-        <h2 className="text-sm font-semibold text-slate-300">ãã¼ã¸ã§ã³</h2>
+        <h2 className="text-sm font-semibold text-slate-300">バージョン</h2>
         <button
           onClick={() => setShowUploadForm(!showUploadForm)}
           disabled={!trackId}
           className="flex items-center gap-1 text-xs text-purple-400 hover:text-purple-300 disabled:opacity-40 transition-colors"
         >
           <Plus size={14} />
-          è¿½å 
+          追加
         </button>
       </div>
 
-      {/* ãã¼ã¸ã§ã³ã¿ã */}
+      {/* バージョンタブ */}
       {versions.length > 0 && (
         <div className="flex gap-2 flex-wrap mb-2">
           {versions.map((v) => (
@@ -115,12 +115,12 @@ export default function VersionManager({ trackId, versions, selectedVersion, onV
         </div>
       )}
 
-      {/* ã¢ããã­ã¼ããã©ã¼ã  */}
+      {/* アップロードフォーム */}
       {showUploadForm && (
         <div className="mt-2 p-3 bg-slate-700/50 rounded-lg space-y-2">
           <input
             type="text"
-            placeholder="ãã¼ã¸ã§ã³å (ä¾: Ver.1.1)"
+            placeholder="バージョン名 (例: Ver.1.1)"
             value={versionLabel}
             onChange={(e) => setVersionLabel(e.target.value)}
             className="w-full bg-slate-700 text-slate-100 placeholder-slate-500 rounded px-3 py-2 text-sm border border-slate-600 focus:outline-none focus:border-purple-500"
@@ -138,7 +138,7 @@ export default function VersionManager({ trackId, versions, selectedVersion, onV
             ) : (
               <>
                 <Upload size={14} />
-                MP3 / WAV ãé¸æ
+                MP3 / WAV を選択
               </>
             )}
             <input
@@ -150,13 +150,13 @@ export default function VersionManager({ trackId, versions, selectedVersion, onV
               className="hidden"
             />
           </label>
-          <p className="text-xs text-slate-500">WAVã¯èªåã§MP3ã«å¤æããã¾ã</p>
+          <p className="text-xs text-slate-500">WAVは自動でMP3に変換されます</p>
           {error && <p className="text-xs text-red-400">{error}</p>}
         </div>
       )}
 
       {!trackId && (
-        <p className="text-xs text-slate-500">ãã©ãã¯ãé¸æãã¦ãã ãã</p>
+        <p className="text-xs text-slate-500">トラックを選択してください</p>
       )}
     </div>
   )
