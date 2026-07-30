@@ -10,21 +10,21 @@ function formatTimestamp(start, end) {
 export default function ShareButtons({ comments, selectedVersion, trackTitle }) {
   const copyPageUrl = () => {
     navigator.clipboard.writeText(window.location.href)
-      .then(() => alert('URLãã³ãã¼ãã¾ãã'))
-      .catch(() => alert('ã³ãã¼ã«å¤±æãã¾ãã'))
+      .then(() => alert('URLをコピーしました'))
+      .catch(() => alert('コピーに失敗しました'))
   }
 
   const shareOnLine = () => {
     const url = encodeURIComponent(window.location.href)
-    const title = encodeURIComponent(`${trackTitle} ${selectedVersion?.version_label ?? ''} ã®ã¬ãã¥ã¼`)
+    const title = encodeURIComponent(`${trackTitle} ${selectedVersion?.version_label ?? ''} のレビュー`)
     window.open(`https://line.me/R/msg/text/?${title}%0A${url}`, '_blank')
   }
 
   const exportCSV = () => {
-    if (!comments.length) { alert('ã³ã¡ã³ããããã¾ãã'); return }
+    if (!comments.length) { alert('コメントがありません'); return }
 
     const vLabel = selectedVersion?.version_label ?? ''
-    const headers = ['ã¿ã¤ã ã¹ã¿ã³ã', 'ã¡ã³ãã¼', 'ã³ã¡ã³ã', 'æç¨¿æ¥æ']
+    const headers = ['タイムスタンプ', 'メンバー', 'コメント', '投稿日時']
     const rows = [...comments]
       .sort((a, b) => (a.timestamp_start ?? Infinity) - (b.timestamp_start ?? Infinity))
       .map((c) => [
@@ -38,7 +38,7 @@ export default function ShareButtons({ comments, selectedVersion, trackTitle }) 
       .map((row) => row.map((cell) => `"${cell}"`).join(','))
       .join('\r\n')
 
-    const blob = new Blob(['ï»¿' + csv], { type: 'text/csv;charset=utf-8' })
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
@@ -54,7 +54,7 @@ export default function ShareButtons({ comments, selectedVersion, trackTitle }) 
         className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-white bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded transition-colors"
       >
         <Link size={12} />
-        URLã³ãã¼
+        URLコピー
       </button>
       <button
         onClick={shareOnLine}
@@ -68,7 +68,7 @@ export default function ShareButtons({ comments, selectedVersion, trackTitle }) 
         className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-white bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded transition-colors ml-auto"
       >
         <Download size={12} />
-        CSVåºå
+        CSV出力
       </button>
     </div>
   )
