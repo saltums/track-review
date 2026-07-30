@@ -14,7 +14,7 @@ export default function CommentForm({ versionId, members, currentTime, onComment
   const [error, setError] = useState('')
   const textRef = useRef(null)
 
-  // ãã­ã¹ãå¥åéå§æã«ç¾å¨åçæå»ãã­ã£ããã£
+  // テキスト入力開始時に現在再生時刻をキャプチャ
   const handleFocus = () => {
     if (tsMode === 'single' && capturedTime === null) {
       setCapturedTime(currentTime)
@@ -34,7 +34,7 @@ export default function CommentForm({ versionId, members, currentTime, onComment
 
   const handleSubmit = async () => {
     if (!text.trim() || !member || !versionId) {
-      setError('ã¡ã³ãã¼ã¨ã³ã¡ã³ããå¥åãã¦ãã ãã')
+      setError('メンバーとコメントを入力してください')
       return
     }
     setError('')
@@ -67,20 +67,20 @@ export default function CommentForm({ versionId, members, currentTime, onComment
 
   return (
     <div className="bg-slate-800/50 border-b border-slate-700 px-4 py-3 space-y-3">
-      {/* ã¡ã³ãã¼é¸æ */}
+      {/* メンバー選択 */}
       <div className="flex gap-2">
         <select
           value={member}
           onChange={(e) => setMember(e.target.value)}
           className="flex-1 bg-slate-700 text-slate-100 rounded px-3 py-2 text-sm border border-slate-600 focus:outline-none focus:border-purple-500"
         >
-          <option value="">ã¡ã³ãã¼ãé¸æ</option>
+          <option value="">メンバーを選択</option>
           {members.map((m) => (
             <option key={m.id} value={m.name}>{m.name}</option>
           ))}
         </select>
 
-        {/* ã¿ã¤ã ã¹ã¿ã³ãã¢ã¼ãåæ¿ */}
+        {/* タイムスタンプモード切替 */}
         <div className="flex rounded overflow-hidden border border-slate-600">
           <button
             onClick={() => { setTsMode('single'); setTsEnd('') }}
@@ -97,7 +97,7 @@ export default function CommentForm({ versionId, members, currentTime, onComment
         </div>
       </div>
 
-      {/* ã¿ã¤ã ã¹ã¿ã³ãå¥å */}
+      {/* タイムスタンプ入力 */}
       <div className="flex gap-2 items-center">
         {tsMode === 'single' ? (
           <>
@@ -109,14 +109,14 @@ export default function CommentForm({ versionId, members, currentTime, onComment
                 onChange={(e) => setTsStart(e.target.value)}
                 className="w-16 bg-slate-700 text-slate-100 placeholder-slate-500 rounded px-2 py-1.5 text-sm border border-slate-600 focus:outline-none focus:border-purple-500 tabular-nums"
               />
-              <span className="text-xs text-slate-500">ç§æ°</span>
+              <span className="text-xs text-slate-500">秒数</span>
             </div>
             <button
               onClick={() => captureNow('start')}
               className="flex items-center gap-1 text-xs bg-slate-700 hover:bg-slate-600 text-purple-400 px-2 py-1.5 rounded border border-slate-600 transition-colors"
             >
               <Clock size={12} />
-              ç¾å¨æå»
+              現在時刻
             </button>
           </>
         ) : (
@@ -129,9 +129,9 @@ export default function CommentForm({ versionId, members, currentTime, onComment
                 onChange={(e) => setTsStart(e.target.value)}
                 className="w-14 bg-slate-700 text-slate-100 placeholder-slate-500 rounded px-2 py-1.5 text-sm border border-slate-600 focus:outline-none focus:border-purple-500 tabular-nums"
               />
-              <button onClick={() => captureNow('start')} className="text-xs text-purple-400 hover:text-purple-300 px-1">â¶</button>
+              <button onClick={() => captureNow('start')} className="text-xs text-purple-400 hover:text-purple-300 px-1">▶</button>
             </div>
-            <span className="text-slate-500">ã</span>
+            <span className="text-slate-500">〜</span>
             <div className="flex items-center gap-1">
               <input
                 type="text"
@@ -140,19 +140,19 @@ export default function CommentForm({ versionId, members, currentTime, onComment
                 onChange={(e) => setTsEnd(e.target.value)}
                 className="w-14 bg-slate-700 text-slate-100 placeholder-slate-500 rounded px-2 py-1.5 text-sm border border-slate-600 focus:outline-none focus:border-purple-500 tabular-nums"
               />
-              <button onClick={() => captureNow('end')} className="text-xs text-purple-400 hover:text-purple-300 px-1">â¶</button>
+              <button onClick={() => captureNow('end')} className="text-xs text-purple-400 hover:text-purple-300 px-1">▶</button>
             </div>
-            <span className="text-xs text-slate-500">ç¯å²</span>
+            <span className="text-xs text-slate-500">範囲</span>
           </>
         )}
       </div>
 
-      {/* ã³ã¡ã³ãå¥å */}
+      {/* コメント入力 */}
       <div className="flex gap-2">
         <textarea
           ref={textRef}
           rows={2}
-          placeholder="ã³ã¡ã³ããå¥å... (ãã©ã¼ã«ã¹æã«åçæå»ãèªååå¾)"
+          placeholder="コメントを入力... (フォーカス時に再生時刻を自動取得)"
           value={text}
           onChange={(e) => setText(e.target.value)}
           onFocus={handleFocus}
