@@ -7,9 +7,9 @@ import CommentForm from './components/CommentForm'
 import CommentList from './components/CommentList'
 import ShareButtons from './components/ShareButtons'
 
-// ââââââââââââââââââââââââââââââââââââââââââââââ
-// ãã©ãã¯é¸æããã«
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// ──────────────────────────────────────────────
+// トラック選択パネル
+// ──────────────────────────────────────────────
 function TrackSelector({ tracks, selectedTrack, onSelect, onCreated }) {
   const [open, setOpen] = useState(false)
   const [creating, setCreating] = useState(false)
@@ -38,14 +38,14 @@ function TrackSelector({ tracks, selectedTrack, onSelect, onCreated }) {
       >
         <Music size={16} className="text-purple-400 flex-shrink-0" />
         <span className="truncate max-w-[180px]">
-          {selectedTrack?.title ?? 'ãã©ãã¯ãé¸æ'}
+          {selectedTrack?.title ?? 'トラックを選択'}
         </span>
         <ChevronDown size={14} className="text-slate-400 flex-shrink-0" />
       </button>
 
       {open && (
         <>
-          {/* ãªã¼ãã¼ã¬ã¤ */}
+          {/* オーバーレイ */}
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
           <div className="absolute top-full left-0 mt-1 w-64 bg-slate-800 border border-slate-600 rounded-lg shadow-xl z-50">
             {tracks.map((t) => (
@@ -65,14 +65,14 @@ function TrackSelector({ tracks, selectedTrack, onSelect, onCreated }) {
                   <input
                     autoFocus
                     type="text"
-                    placeholder="ãã©ãã¯å"
+                    placeholder="トラック名"
                     value={newTitle}
                     onChange={(e) => setNewTitle(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && createTrack()}
                     className="flex-1 bg-slate-700 text-slate-100 rounded px-2 py-1 text-sm border border-slate-600 focus:outline-none focus:border-purple-500"
                   />
                   <button onClick={createTrack} className="text-purple-400 hover:text-purple-300 px-2">
-                    â
+                    ✓
                   </button>
                   <button onClick={() => setCreating(false)} className="text-slate-500 hover:text-slate-300 px-1">
                     <X size={14} />
@@ -83,7 +83,7 @@ function TrackSelector({ tracks, selectedTrack, onSelect, onCreated }) {
                   onClick={() => setCreating(true)}
                   className="flex items-center gap-1 text-xs text-purple-400 hover:text-purple-300 px-2 py-1"
                 >
-                  <Plus size={12} /> æ°ãããã©ãã¯
+                  <Plus size={12} /> 新しいトラック
                 </button>
               )}
             </div>
@@ -94,9 +94,9 @@ function TrackSelector({ tracks, selectedTrack, onSelect, onCreated }) {
   )
 }
 
-// ââââââââââââââââââââââââââââââââââââââââââââââ
-// ã¡ã³ãã¼ç®¡çã¢ã¼ãã«
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// ──────────────────────────────────────────────
+// メンバー管理モーダル
+// ──────────────────────────────────────────────
 function MemberPanel({ members, onMembersChange, onClose }) {
   const [newName, setNewName] = useState('')
 
@@ -122,7 +122,7 @@ function MemberPanel({ members, onMembersChange, onClose }) {
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
       <div className="bg-slate-800 rounded-xl w-full max-w-sm p-4 border border-slate-600 shadow-2xl">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-semibold text-slate-100">ã¡ã³ãã¼ç®¡ç</h3>
+          <h3 className="font-semibold text-slate-100">メンバー管理</h3>
           <button onClick={onClose} className="text-slate-400 hover:text-white p-1">
             <X size={18} />
           </button>
@@ -140,13 +140,13 @@ function MemberPanel({ members, onMembersChange, onClose }) {
             </div>
           ))}
           {members.length === 0 && (
-            <p className="text-xs text-slate-500 px-3 py-2">ã¡ã³ãã¼ããã¾ãã</p>
+            <p className="text-xs text-slate-500 px-3 py-2">メンバーがいません</p>
           )}
         </div>
         <div className="flex gap-2">
           <input
             type="text"
-            placeholder="ã¡ã³ãã¼åãè¿½å "
+            placeholder="メンバー名を追加"
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && addMember()}
@@ -156,7 +156,7 @@ function MemberPanel({ members, onMembersChange, onClose }) {
             onClick={addMember}
             className="bg-purple-600 hover:bg-purple-500 text-white px-3 py-2 rounded text-sm transition-colors"
           >
-            è¿½å 
+            追加
           </button>
         </div>
       </div>
@@ -164,9 +164,9 @@ function MemberPanel({ members, onMembersChange, onClose }) {
   )
 }
 
-// ââââââââââââââââââââââââââââââââââââââââââââââ
-// ã¡ã¤ã³ã¢ããª
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// ──────────────────────────────────────────────
+// メインアプリ
+// ──────────────────────────────────────────────
 export default function App() {
   const [tracks, setTracks] = useState([])
   const [selectedTrack, setSelectedTrack] = useState(null)
@@ -175,12 +175,12 @@ export default function App() {
   const [comments, setComments] = useState([])
   const [members, setMembers] = useState([])
   const [currentTime, setCurrentTime] = useState(0)
-  // ã³ã¡ã³ãã¯ãªãã¯ â ãã¬ã¤ã¤ã¼ã·ã¼ã¯ç¨ã®ãªã¯ã¨ã¹ã
+  // コメントクリック → プレイヤーシーク用のリクエスト
   const [seekRequest, setSeekRequest] = useState(null)
   const [showMemberPanel, setShowMemberPanel] = useState(false)
   const [loading, setLoading] = useState(true)
 
-  // åæã­ã¼ã
+  // 初期ロード
   useEffect(() => {
     Promise.all([
       supabase.from('tracks').select('*').order('created_at', { ascending: false }),
@@ -192,7 +192,7 @@ export default function App() {
     })
   }, [])
 
-  // ãã©ãã¯å¤æ´ â ãã¼ã¸ã§ã³åå¾
+  // トラック変更 → バージョン取得
   useEffect(() => {
     if (!selectedTrack) { setVersions([]); setSelectedVersion(null); return }
     supabase
@@ -207,7 +207,7 @@ export default function App() {
       })
   }, [selectedTrack])
 
-  // ãã¼ã¸ã§ã³å¤æ´ â ã³ã¡ã³ãåå¾
+  // バージョン変更 → コメント取得
   useEffect(() => {
     if (!selectedVersion) { setComments([]); return }
     supabase
@@ -219,21 +219,21 @@ export default function App() {
   }, [selectedVersion])
 
   const handleSeek = (sec) => {
-    // æ¯åå¿ã useEffect ãçºç«ããããããªãã¸ã§ã¯ãã§ã©ãã
+    // 毎回必ず useEffect を発火させるためオブジェクトでラップ
     setSeekRequest({ time: sec, id: Date.now() })
   }
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-900">
-        <div className="text-slate-400 text-sm animate-pulse">èª­ã¿è¾¼ã¿ä¸­...</div>
+        <div className="text-slate-400 text-sm animate-pulse">読み込み中...</div>
       </div>
     )
   }
 
   return (
     <div className="flex flex-col h-screen bg-slate-900 max-w-2xl mx-auto">
-      {/* ãããã¼ */}
+      {/* ヘッダー */}
       <header className="bg-slate-800 border-b border-slate-700 px-4 py-3 flex items-center justify-between flex-shrink-0">
         <TrackSelector
           tracks={tracks}
@@ -244,13 +244,13 @@ export default function App() {
         <button
           onClick={() => setShowMemberPanel(true)}
           className="text-slate-400 hover:text-white p-1.5 transition-colors"
-          title="ã¡ã³ãã¼ç®¡ç"
+          title="メンバー管理"
         >
           <Settings size={18} />
         </button>
       </header>
 
-      {/* ãã¼ã¸ã§ã³ç®¡ç */}
+      {/* バージョン管理 */}
       <VersionManager
         trackId={selectedTrack?.id}
         versions={versions}
@@ -262,14 +262,14 @@ export default function App() {
         }}
       />
 
-      {/* å±æã»CSV */}
+      {/* 共有・CSV */}
       <ShareButtons
         comments={comments}
         selectedVersion={selectedVersion}
         trackTitle={selectedTrack?.title ?? 'track'}
       />
 
-      {/* ã³ã¡ã³ãå¥å */}
+      {/* コメント入力 */}
       <CommentForm
         versionId={selectedVersion?.id}
         members={members}
@@ -277,14 +277,14 @@ export default function App() {
         onCommentAdded={(c) => setComments((prev) => [...prev, c])}
       />
 
-      {/* ã³ã¡ã³ãä¸è¦§ï¼ã¹ã¯ã­ã¼ã«ï¼ */}
+      {/* コメント一覧（スクロール） */}
       <CommentList
         comments={comments}
         onDelete={(id) => setComments((prev) => prev.filter((c) => c.id !== id))}
         onSeek={handleSeek}
       />
 
-      {/* ãã¬ã¤ã¤ã¼ï¼åºå®ä¸é¨ï¼ */}
+      {/* プレイヤー（固定下部） */}
       <div className="flex-shrink-0">
         <AudioPlayer
           fileUrl={selectedVersion?.file_url}
